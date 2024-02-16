@@ -1,0 +1,1 @@
+type ParamsType = {id:string};

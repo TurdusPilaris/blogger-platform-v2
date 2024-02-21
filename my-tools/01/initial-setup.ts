@@ -4,6 +4,7 @@ const first = {
     terminal03: 'yarn add nodemon --dev',
     terminal04: 'yarn add typescript ts-node @types/node @types/express --dev',
     terminal05: 'yarn tsc --init',
+    terminal06: "yarn add dotenv --dev"
 }
 // 1.6 предпочтительное содержимое tsconfig.json
 //  {

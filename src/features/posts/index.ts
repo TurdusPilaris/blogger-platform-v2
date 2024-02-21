@@ -2,7 +2,7 @@ import {Router} from "express";
 import {getPostsController} from "./getPostsController";
 import {deletePostsController} from "./deletePostsController";
 import {
-    authMiddleware, customBlogIdMiddleware,
+    authMiddleware,
     inputValidationMiddleware,
     postInputValidatorPost
 } from "../../middlewares/input-validation-middleware";

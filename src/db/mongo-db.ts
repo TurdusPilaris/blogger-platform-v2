@@ -8,8 +8,6 @@ export type BlogDBType = {
     title: string
 }
 
-console.log("URL HERE "+ SETTING.MONGO_URL)
-console.log("DB_NAME HERE "+ SETTING.DB_NAME)
 const client: MongoClient = new MongoClient(SETTING.MONGO_URL);
 export const db = client.db(SETTING.DB_NAME)
 export const blogCollection = db.collection<BlogDBMongoTypeWithoutID>(SETTING.BLOG_COLLECTION_NAME);

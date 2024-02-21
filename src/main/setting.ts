@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 export const SETTING = {
-    PORT : 3006,
+    PORT : 3008,
 
     MONGO_URL: process.env.MONGO_URL || '',
     DB_NAME: process.env.DB_NAME || '',

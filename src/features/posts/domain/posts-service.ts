@@ -1,32 +1,28 @@
 import {
-    BlogDBMongoType,
     InsertedInfoType,
-    PostDBMongoType,
-    TypePostInputModelModel,
-    TypePostViewModel
-} from "../../input-output-types/inputOutputTypesMongo";
-import {blogsMongoRepository} from "../blogs/blogsMongoRepository";
-import {postCollection} from "../../db/mongo-db";
+    PostDBMongoType, PostDBMongoTypeWithoutID,
+} from "../../../input-output-types/inputOutputTypesMongo";
+import {blogsMongoRepository} from "../../blogs/repositories/blogsMongoRepository";
+import {postCollection} from "../../../db/mongo-db";
 import {ObjectId, WithId} from "mongodb";
+import {TypePostInputModelModel} from "../../../input-output-types/posts/inputTypes";
+import {TypePostViewModel} from "../../../input-output-types/posts/outputTypes";
+import {postsMongoRepository} from "../repositories/postMongoRepository";
+import {TypeBlogInputModel} from "../../../input-output-types/blogs/inputTypes";
 
-export const postsMongoRepository ={
+export const postsService ={
     async create(input: TypePostInputModelModel) {
 
         const foundedBlog = await blogsMongoRepository.findForOutput(new ObjectId(input.blogId));
-        const newPost= {
-             title: input.title,
-             shortDescription: input.shortDescription,
-             content: input.content,
-             blogId: input.blogId,
-             blogName: foundedBlog?.name,
+        const newPost: PostDBMongoTypeWithoutID = {
+            title: input.title,
+            shortDescription: input.shortDescription,
+            content: input.content,
+            blogId: input.blogId,
+            blogName: foundedBlog?.name,
             createdAt: new Date().toISOString(),
         }
-        try{
-            const insertedInfo = await postCollection.insertOne(newPost);
-            return insertedInfo as InsertedInfoType;
-        } catch (e){
-            return undefined;
-        }
+        return postsMongoRepository.create(newPost);
 
     },
     async find(id: ObjectId) {
@@ -38,7 +34,7 @@ export const postsMongoRepository ={
     async findForOutput(id: ObjectId) {
         const foundPost =  await this.find(id);
         if(!foundPost) {return undefined}
-        return this.mapToOutput(foundPost as PostDBMongoType);
+        return this.mapToOutput(foundPost);
     },
     mapToOutput(post: PostDBMongoType):TypePostViewModel {
         return {
@@ -56,7 +52,7 @@ export const postsMongoRepository ={
 
         const allPosts:WithId<PostDBMongoType>[] = await postCollection.find().toArray();
         return allPosts.map((p) =>{
-           return this.mapToOutput(p);
+            return this.mapToOutput(p);
         })
 
     },
@@ -70,18 +66,7 @@ export const postsMongoRepository ={
         let post = await postsMongoRepository.findForOutput(id);
         if(!post) {
             return undefined;
-        }
-        let foundedBlog = await blogsMongoRepository.findForOutput(new ObjectId(post.blogId));
-       await postCollection.updateOne({_id: id}, {
-           $set: {
-               title: input.title,
-               shortDescription: input.shortDescription,
-               content: input.content,
-               blogId: input.blogId??post.blogId,
-               blogName: foundedBlog?.name
-           }
-       })
-
+        } else { await  postsMongoRepository.updatePost(id, input)}
     }
 
 }

@@ -17,7 +17,7 @@ export const connectionToDB = async () => {
     try{
         await client.connect();
         await  db.command({ping:1});
-        console.log("Connection sucessfully");
+        console.log("Connection successfuly");
         return true;
     } catch (e) {
         console.log(e);

@@ -6,7 +6,7 @@ import {connectionToDB} from "./db/mongo-db";
 const start = async  () =>{
     addRoutes(app);
 
-    if(!connectionToDB()) {
+    if(!await connectionToDB()) {
         process.exit(1);
     }
     app.listen(SETTING.PORT, () => {

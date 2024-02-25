@@ -10,7 +10,7 @@ import {TypePostViewModel} from "../../../input-output-types/posts/outputTypes";
 import {postsMongoRepository} from "../repositories/postMongoRepository";
 import {TypeBlogInputModel} from "../../../input-output-types/blogs/inputTypes";
 
-export const postsService ={
+export const postsService = {
     async create(input: TypePostInputModelModel) {
 
         const foundedBlog = await blogsMongoRepository.findForOutput(new ObjectId(input.blogId));
@@ -32,26 +32,28 @@ export const postsService ={
         return foundPost;
     },
     async findForOutput(id: ObjectId) {
-        const foundPost =  await this.find(id);
-        if(!foundPost) {return undefined}
+        const foundPost = await this.find(id);
+        if (!foundPost) {
+            return undefined
+        }
         return this.mapToOutput(foundPost);
     },
-    mapToOutput(post: PostDBMongoType):TypePostViewModel {
+    mapToOutput(post: PostDBMongoType): TypePostViewModel {
         return {
             id: post._id.toString(),
             title: post.title,
-            shortDescription: post.shortDescription||'',
-            content: post.content||'',
-            blogId: post.blogId||'',
-            blogName: post.blogName||'',
-            createdAt: post.createdAt||'',
+            shortDescription: post.shortDescription || '',
+            content: post.content || '',
+            blogId: post.blogId || '',
+            blogName: post.blogName || '',
+            createdAt: post.createdAt || '',
 
         }
     },
     getAllPosts: async function () {
 
-        const allPosts:WithId<PostDBMongoType>[] = await postCollection.find().toArray();
-        return allPosts.map((p) =>{
+        const allPosts: WithId<PostDBMongoType>[] = await postCollection.find().toArray();
+        return allPosts.map((p) => {
             return this.mapToOutput(p);
         })
 
@@ -64,9 +66,11 @@ export const postsService ={
     async updatePost(id: ObjectId, input: TypePostInputModelModel) {
 
         let post = await postsMongoRepository.findForOutput(id);
-        if(!post) {
+        if (!post) {
             return undefined;
-        } else { await  postsMongoRepository.updatePost(id, input)}
+        } else {
+            await postsMongoRepository.updatePost(id, input)
+        }
     }
 
 }

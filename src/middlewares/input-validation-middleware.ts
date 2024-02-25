@@ -1,11 +1,10 @@
-import {body, param, query, validationResult} from "express-validator";
+import {body, param, validationResult} from "express-validator";
 import {NextFunction, Response, Request} from "express";
 import {blogsMongoRepository} from "../features/blogs/repositories/blogsMongoRepository";
 import {ObjectId} from "mongodb";
 
 export const inputValidationMiddleware = (req:Request, res: Response, next: NextFunction): any => {
 
-    console.log('Hello!')
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
         res.status(400).json({errorsMessages: errors.array().map((e: any) => {return {field: e.path, message: e.msg}})});
@@ -17,7 +16,6 @@ export const inputValidationMiddleware = (req:Request, res: Response, next: Next
 
 export const inputValidationMiddlewareBlogID = (req:Request, res: Response, next: NextFunction): any => {
 
-    console.log('Hello!')
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
         res.status(404).json({errorsMessages: errors.array().map((e: any) => {return {field: e.path, message: e.msg}})});
@@ -27,28 +25,10 @@ export const inputValidationMiddlewareBlogID = (req:Request, res: Response, next
     }
 }
 
-export const postInputValidator =
-    [
-        body('title').trim().isString(),
-        body('content').trim().isLength({min: 0, max: 1000}),
-        body('blogId').custom(async (blogId) => {
-            if (!ObjectId.isValid(blogId)) {
-                throw new Error('Blog ID is not valid')
-            };
-            if(blogId) {
-                const foundBlog = await blogsMongoRepository.find(new ObjectId(blogId))
-                if(!foundBlog) {
-                    throw new Error('Blog not found')
-                }}
-}) ,
-    ]
-
 export const postInputValidatorBlogID =
     [
         param('blogId').custom(async (blogId) => {
 
-            console.log("blog ID "+blogId)
-            console.log("valid ID "+ObjectId.isValid(blogId))
             if (!ObjectId.isValid(blogId)) {
                 throw new Error('Blog ID is not valid')
             }
@@ -73,38 +53,32 @@ export const validBlogIdMiddleware = async (req: Request, res: Response, next: N
 
     console.log('blogId ' + req.params.blogId);
     if (!ObjectId.isValid(req.params.blogId)) {
-        // return next(new Error('Blog ID is not valid'))
         throw new Error('Blog ID is not valid')
     }
     const foundBlog = await blogsMongoRepository.find(new ObjectId(req.params.blogId))
     console.log('foundedBlog ' + foundBlog);
     if (!foundBlog) {
-        // return next(new Error('Blog not found'))
         throw new Error('Blog not found')
     }
     next();
 }
 
-
-export const titleValidation = body('title').trim().isLength({min: 3, max: 30}).withMessage('Field should be from 3 to 30');
 export const postInputValidatorPost =
 
     [
          body('title').trim().isLength({min: 3, max: 30}).withMessage('Field should be from 3 to 30'),
-        // titleValidation,
         body('shortDescription').trim().isLength({min: 1, max: 100}).withMessage('Field should be from 1 to 100'),
         body('content').trim().isLength({min: 1, max: 1000}).withMessage('Field should be from 1 to 1000'),
         body('blogId').custom(async value => {
             if (!ObjectId.isValid(value)) {
                 throw new Error('Blog ID is not valid')
-            };
+            }
             if(value) {
             const foundBlog = await blogsMongoRepository.find(new ObjectId(value))
             if(!foundBlog) {
                 throw new Error('Blog not found')
             }}
         })
-        // customBlogIdMiddleware
 
     ]
 

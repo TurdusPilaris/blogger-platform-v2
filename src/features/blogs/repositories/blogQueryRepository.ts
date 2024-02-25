@@ -22,7 +22,7 @@ export const blogQueryRepository = {
 
         const byID = {blogId: blogId};
 
-        const search = query.searchNameTerm? {title:{$regex: query.searchNameTerm, $options: 'i'}}: {}
+        // const search = query.searchNameTerm? {title:{$regex: query.searchNameTerm, $options: 'i'}}: {}
 
         const items = await postCollection
             .find({

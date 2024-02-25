@@ -23,7 +23,8 @@ export const blogsRouter = Router();
 blogsRouter.get('/', getBlogsController);
 blogsRouter.get('/:id', getBlogsControllerByID);
 blogsRouter.post('/', authMiddleware, postInputValidatorBlog, inputValidationMiddleware, postBlogsController);
-blogsRouter.put('/:id', authMiddleware, postInputValidatorBlog, inputValidationMiddleware,  putBlogsController);
-blogsRouter.delete('/:id', authMiddleware,  deleteBlogsController);
-blogsRouter.get('/:blogId/posts',postInputValidatorBlogID,inputValidationMiddlewareBlogID, getPostsForBlogID);
-blogsRouter.post('/:blogId/posts',authMiddleware, postInputValidatorBlogID, inputValidationMiddlewareBlogID, postInputValidatorPostWithoutBlogID, inputValidationMiddleware, postPostsForBlogsController);
+blogsRouter.put('/:id', authMiddleware, postInputValidatorBlog, inputValidationMiddleware, putBlogsController);
+blogsRouter.delete('/:id', authMiddleware, deleteBlogsController);
+blogsRouter.get('/:blogId/posts', postInputValidatorBlogID, inputValidationMiddlewareBlogID, getPostsForBlogID);
+blogsRouter.post('/:blogId/posts', authMiddleware, postInputValidatorBlogID, inputValidationMiddlewareBlogID,
+    postInputValidatorPostWithoutBlogID, inputValidationMiddleware, postPostsForBlogsController);

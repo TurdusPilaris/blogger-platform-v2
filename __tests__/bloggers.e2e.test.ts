@@ -89,99 +89,15 @@ describe('/blogs', () =>{
             createdAt: new Date().toISOString(),
         }
 
-        const insertedInfoPost1 = await postCollection.insertOne(newPost);
-        const insertedInfoPost2 = await postCollection.insertOne(newPost2);
+         await postCollection.insertOne(newPost);
+         await postCollection.insertOne(newPost2);
 
         const res = await req
             .get(`/blogs/${info.insertedId.toString()}/posts?pageNumber=1&pageSize=10&sortBy=createdAt&sortDirection=asc&searchNameTerm=2`)
             .expect(200);
 
 
-        // expect(res.body.length).toBe(allBlogs.length);
     })
-    // it('DELETE blogs not found = []', async () => {
-    //
-    //     const res = await req
-    //         .delete('/blogs/9')
-    //         .set({authorization: CORRECT_ADMIN_AUTH_BASE64})
-    //         .expect(404);
-    //
-    // })
-    //
-    // it('DELETE blogs OK = []', async () => {
-    //
-    //     const res = await req
-    //         .delete('/blogs/02')
-    //         .set({authorization: CORRECT_ADMIN_AUTH_BASE64})
-    //         .expect(204);
-    //
-    // })
-    //
-    // it('DELETE posts not auth Unauthorized= []', async () => {
-    //
-    //     const res = await req
-    //         .delete('/posts/2')
-    //         .expect(401);
-    //
-    // })
-    //
-    // it('DELETE posts invalid auth Unauthorized= []', async () => {
-    //
-    //     const res = await req
-    //         .delete('/posts/2')
-    //         .set({authorization: UNCORRECT_ADMIN_AUTH_BASE64})
-    //         .expect(401);
-    //
-    // })
-    //
-    // it('DELETE posts not found = []', async () => {
-    //
-    //     const res = await req
-    //         .delete('/posts/9')
-    //         .set({authorization: CORRECT_ADMIN_AUTH_BASE64})
-    //         .expect(404);
-    //
-    // })
-    //
-    // it('DELETE posts OK = []', async () => {
-    //
-    //     const res = await req
-    //         .delete('/posts/1')
-    //         .set({authorization: CORRECT_ADMIN_AUTH_BASE64})
-    //         .expect(204);
-    //
-    // })
-    //
-    // it('GET posts with id OK = []', async () => {
-    //
-    //     const res = await req
-    //         .get('/posts/4')
-    //         .expect(200);
-    //         expect(res.body).toStrictEqual(postsRepository.findPost('4'));
-    // })
-    //
-    // it('GET posts with id not found = []', async () => {
-    //
-    //     const res = await req
-    //         .get('/posts/4341')
-    //         .expect(404);
-    //
-    // })
-    //
-    // it('GET blogs with id OK = []', async () => {
-    //
-    //     const res = await req
-    //         .get('/blogs/01')
-    //         .expect(200);
-    //     expect(res.body).toStrictEqual(blogsRepository.findBlog('01'));
-    // })
-    //
-    // it('GET blogs with id not found = []', async () => {
-    //
-    //     const res = await req
-    //         .get('/blogs/4341')
-    //         .expect(404);
-    //
-    // })
+
 
 })
